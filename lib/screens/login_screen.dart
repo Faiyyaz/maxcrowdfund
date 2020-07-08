@@ -49,72 +49,38 @@ class _LoginScreenState extends BaseState<LoginScreen> with BasicPage {
         ),
         centerTitle: true,
       ),
-      body: Container(
-        margin: EdgeInsetsResponsive.symmetric(
-          horizontal: 32.0,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            TextField(
-              controller: _nameController,
-              autocorrect: false,
-              autofocus: false,
-              decoration: InputDecoration(
-                hintText: 'Enter Name',
-                hintStyle: TextFieldStyle.getStyle(
-                  textColor: kBlackColor,
-                  fontSize: 16.0,
-                  fontFamily: kRegularStyle,
-                ),
-                errorText: _isValidName ? null : 'Please enter name',
-                errorStyle: TextFieldStyle.getStyle(
-                  textColor: kErrorColor,
-                  fontSize: 16.0,
-                  fontFamily: kRegularStyle,
-                ),
-              ),
-              style: TextFieldStyle.getStyle(
-                textColor: kBlackColor,
-                fontSize: 16.0,
-                fontFamily: kBoldStyle,
-              ),
-            ),
-            Container(
-              margin: EdgeInsetsResponsive.symmetric(
-                vertical: 16.0,
-              ),
-              child: TextField(
-                controller: _passwordController,
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).requestFocus(
+            FocusNode(),
+          );
+        },
+        child: Container(
+          margin: EdgeInsetsResponsive.symmetric(
+            horizontal: 32.0,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              TextField(
+                maxLines: 1,
+                textInputAction: TextInputAction.done,
+                controller: _nameController,
                 autocorrect: false,
                 autofocus: false,
-                obscureText: !_isPasswordVisible,
                 decoration: InputDecoration(
-                  hintText: 'Enter Password',
+                  hintText: 'Enter Name',
                   hintStyle: TextFieldStyle.getStyle(
                     textColor: kBlackColor,
                     fontSize: 16.0,
                     fontFamily: kRegularStyle,
                   ),
-                  errorText: _isValidPassword ? null : 'Please enter password',
+                  errorText: _isValidName ? null : 'Please enter name',
                   errorStyle: TextFieldStyle.getStyle(
                     textColor: kErrorColor,
                     fontSize: 16.0,
                     fontFamily: kRegularStyle,
-                  ),
-                  suffixIcon: GestureDetector(
-                    onTap: () {
-                      _isPasswordVisible = !_isPasswordVisible;
-                      setState(() {});
-                    },
-                    child: CustomIcon(
-                      color: kBlackColor,
-                      size: 32,
-                      iconData: _isPasswordVisible
-                          ? Icons.visibility
-                          : Icons.visibility_off,
-                    ),
                   ),
                 ),
                 style: TextFieldStyle.getStyle(
@@ -123,44 +89,90 @@ class _LoginScreenState extends BaseState<LoginScreen> with BasicPage {
                   fontFamily: kBoldStyle,
                 ),
               ),
-            ),
-            CustomButton(
-              onPressed: () {
-                _loader.show();
-                String name = _nameController.text;
-                String password = _passwordController.text;
-                if (name.isNotEmpty && password.isNotEmpty) {
-                  _callWebFunction(
-                    body: {
-                      "name": name,
-                      "pass": password,
-                    },
-                  );
-                } else {
-                  _loader.hide();
-                  if (name.isEmpty) {
-                    _isValidName = false;
+              Container(
+                margin: EdgeInsetsResponsive.symmetric(
+                  vertical: 16.0,
+                ),
+                child: TextField(
+                  maxLines: 1,
+                  textInputAction: TextInputAction.done,
+                  controller: _passwordController,
+                  autocorrect: false,
+                  autofocus: false,
+                  obscureText: !_isPasswordVisible,
+                  decoration: InputDecoration(
+                    hintText: 'Enter Password',
+                    hintStyle: TextFieldStyle.getStyle(
+                      textColor: kBlackColor,
+                      fontSize: 16.0,
+                      fontFamily: kRegularStyle,
+                    ),
+                    errorText:
+                        _isValidPassword ? null : 'Please enter password',
+                    errorStyle: TextFieldStyle.getStyle(
+                      textColor: kErrorColor,
+                      fontSize: 16.0,
+                      fontFamily: kRegularStyle,
+                    ),
+                    suffixIcon: GestureDetector(
+                      onTap: () {
+                        _isPasswordVisible = !_isPasswordVisible;
+                        setState(() {});
+                      },
+                      child: CustomIcon(
+                        color: kBlackColor,
+                        size: 32,
+                        iconData: _isPasswordVisible
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                      ),
+                    ),
+                  ),
+                  style: TextFieldStyle.getStyle(
+                    textColor: kBlackColor,
+                    fontSize: 16.0,
+                    fontFamily: kBoldStyle,
+                  ),
+                ),
+              ),
+              CustomButton(
+                onPressed: () {
+                  _loader.show();
+                  String name = _nameController.text;
+                  String password = _passwordController.text;
+                  if (name.isNotEmpty && password.isNotEmpty) {
+                    _callWebFunction(
+                      body: {
+                        "name": name,
+                        "pass": password,
+                      },
+                    );
+                  } else {
+                    _loader.hide();
+                    if (name.isEmpty) {
+                      _isValidName = false;
+                    }
+                    if (password.isEmpty) {
+                      _isValidPassword = false;
+                    }
+                    setState(() {});
+                    showSnackBar(
+                      message: kFieldMiss,
+                      type: kError,
+                    );
                   }
-                  if (password.isEmpty) {
-                    _isValidPassword = false;
-                  }
-                  setState(() {});
-                  showSnackBar(
-                    message: kFieldMiss,
-                    type: kError,
-                  );
-                }
-              },
-              textColor: kWhiteColor,
-              titleSize: 16.0,
-              fontFamily: kBoldStyle,
-              title: 'Submit',
-              height: 40,
-              width: 320,
-              cornerRadius: 0,
-              backgroundColor: kBlackColor,
-            )
-          ],
+                },
+                textColor: kWhiteColor,
+                titleSize: 16.0,
+                fontFamily: kBoldStyle,
+                title: 'Submit',
+                height: 40,
+                width: 320,
+                cornerRadius: 0,
+                backgroundColor: kBlackColor,
+              )
+            ],
+          ),
         ),
       ),
     );
