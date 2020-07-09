@@ -195,23 +195,27 @@ class _LoginScreenState extends BaseState<LoginScreen> with BasicPage {
     @required Map<String, dynamic> body,
   }) async {
     Response response = await _webFunctions.getLoginResponse(body: body);
-    Map<String, dynamic> res = jsonDecode(response.data);
-    if (res['status'] == '200') {
-      _loader.hide();
-      LoginResponse loginResponse = LoginResponse.fromJson(res);
-      await _sharedPreferenceHelper.set(
-          kCsrfToken, loginResponse.currentUser.csrfToken);
-      await _sharedPreferenceHelper.set(
-          kLogoutToken, loginResponse.currentUser.logoutToken);
-      navigationService.pushReplacement(
-        route: DashBoardScreen(),
-      );
+    if (response != null) {
+      Map<String, dynamic> res = jsonDecode(response.data);
+      if (res['status'] == '200') {
+        _loader.hide();
+        LoginResponse loginResponse = LoginResponse.fromJson(res);
+        await _sharedPreferenceHelper.set(
+            kCsrfToken, loginResponse.currentUser.csrfToken);
+        await _sharedPreferenceHelper.set(
+            kLogoutToken, loginResponse.currentUser.logoutToken);
+        navigationService.pushReplacement(
+          route: DashBoardScreen(),
+        );
+      } else {
+        _loader.hide();
+        showSnackBar(
+          message: res['mesaage'],
+          type: kError,
+        );
+      }
     } else {
       _loader.hide();
-      showSnackBar(
-        message: res['mesaage'],
-        type: kError,
-      );
     }
   }
 }

@@ -115,6 +115,8 @@ class _DashBoardScreenState extends BaseState<DashBoardScreen> with BasicPage {
           setState(() {});
         }
       }
+    } else {
+      _loader.hide();
     }
   }
 
@@ -134,6 +136,8 @@ class _DashBoardScreenState extends BaseState<DashBoardScreen> with BasicPage {
               route: LoginScreen(),
             );
           });
+    } else {
+      _loader.hide();
     }
   }
 
@@ -149,18 +153,26 @@ class _DashBoardScreenState extends BaseState<DashBoardScreen> with BasicPage {
         itemCount: _balance.length,
         itemBuilder: (BuildContext context, int index) {
           String key = _balance.keys.elementAt(index);
-          return ListTile(
-            title: TextView(
-              textColor: kBlackColor,
-              text: key,
-              fontSize: 16.0,
-              fontFamily: kRegularStyle,
-            ),
-            subtitle: TextView(
-              textColor: kBlackColor,
-              text: '${_balance[key].value}',
-              fontSize: 16.0,
-              fontFamily: kRegularStyle,
+          return Container(
+            margin: EdgeInsetsResponsive.all(16.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Expanded(
+                  child: TextView(
+                    textColor: kBlackColor,
+                    text: '${_balance[key].title}',
+                    fontSize: 16.0,
+                    fontFamily: kRegularStyle,
+                  ),
+                ),
+                TextView(
+                  textColor: kBlackColor,
+                  text: '${_balance[key].value}',
+                  fontSize: 16.0,
+                  fontFamily: kRegularStyle,
+                ),
+              ],
             ),
           );
         },
