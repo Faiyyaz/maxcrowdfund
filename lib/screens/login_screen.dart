@@ -210,7 +210,7 @@ class _LoginScreenState extends BaseState<LoginScreen> with BasicPage {
       } else {
         _loader.hide();
         showSnackBar(
-          message: res['mesaage'],
+          message: res['message'],
           type: kError,
         );
       }

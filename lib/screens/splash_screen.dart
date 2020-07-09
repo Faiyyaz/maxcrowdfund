@@ -18,6 +18,7 @@ class _SplashScreenState extends BaseState<SplashScreen> with BasicPage {
   @override
   Widget getBody(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: PreferredSize(
         preferredSize: Size.zero,
         child: AppBar(
